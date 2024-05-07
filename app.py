@@ -60,16 +60,25 @@ async def on_message(message):
         {"role": "user", "content": history_str},
     ]
 
+    logging.info(f"Received message: {message.content}")
     async with ctx.typing():
-        full_response = ''.join(list(langlang.generate(messages)))
+        logging.info(f"Generating full response...")
+        full_response = ''
+        for line in langlang.generate(messages):
+            print(line, end='')
+            full_response += line
         messages += [
             {"role": "ai", "content": full_response},
-            {"role": "user", "content": f"Summarize for a Discord bot response less than {MAX_MESSAGE_LENGTH} letters and cite only relevant links."}
+            {"role": "user", "content": f"Summarize it into a brief Discord response less than {MAX_MESSAGE_LENGTH} letters and cite relevant links."}
         ]
-        succinct = ''.join(list(langlang.generate(messages)))
+        logging.info(f"Generating summary response...")
+        succinct = ''
+        for line in langlang.generate(messages):
+            print(line, end='')
+            succinct += line
 
-        # Send the response back to the user
-        await ctx.send(succinct[:MAX_MESSAGE_LENGTH])
+    logging.info(f"Sending response...")
+    await ctx.send(succinct[:MAX_MESSAGE_LENGTH])
 
 
 async def startup():
