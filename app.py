@@ -14,7 +14,7 @@ intents.messages = True
 intents.presences = True
 intents.typing = True
 
-MAX_MESSAGE_LENGTH = 4000
+MAX_MESSAGE_LENGTH = 2000
 DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
 bot = commands.Bot(command_prefix='/', intents=intents)
