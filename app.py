@@ -69,7 +69,7 @@ async def on_message(message):
             full_response += line
         messages += [
             {"role": "ai", "content": full_response},
-            {"role": "user", "content": f"Summarize it into a brief Discord response less than {MAX_MESSAGE_LENGTH} letters and cite relevant links."}
+            {"role": "user", "content": f"Summarize the response to less than {MAX_MESSAGE_LENGTH} characters and cite the most relevant reference."}
         ]
         logging.info(f"Generating summary response...")
         succinct = ''
