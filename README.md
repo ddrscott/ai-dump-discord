@@ -1,3 +1,4 @@
+
 ## Google Cloud
 
 ```sh
@@ -16,6 +17,28 @@ gcloud compute instances create dev-micro \
     --shielded-integrity-monitoring \
     --labels=goog-ec-src=vm_add-gcloud \
     --reservation-affinity=any
+```
+
+## Pip Env
+
+```sh
+python3 -m venv discord
+
+source discord/bin/activate
+
+pip install -r requirements.txt
+
+set -a
+
+cat <<-EOF > .env
+DISCORD_BOT_TOKEN=
+FIREBASE_WEB_API_KEY=
+REFRESH_TOKEN=
+DATATURD_API_URL=
+EOF
+source .env
+
+python app.py
 ```
 
 ## How to get refresh token
