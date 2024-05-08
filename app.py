@@ -78,6 +78,7 @@ async def on_message(message):
         for line in langlang.generate(messages):
             print(line, end='')
             succinct += line
+        print('')
 
     logging.info(f"Sending response...")
     await ctx.send(succinct[:MAX_MESSAGE_LENGTH])
