@@ -51,7 +51,7 @@ async def on_message(message):
     # Join the history records with newlines
     history_str = "\n".join(history)
     history_str += "\n```\n"
-    history_str = dedent(f"""\
+    history_str += dedent(f"""\
         Respond to the following request or question:
 
         # Message
