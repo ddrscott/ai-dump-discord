@@ -35,7 +35,7 @@ async def on_message(message):
 
     if f'<@{bot.user.id}>' in message.content:
         pass
-    if f'@{bot.user.name}' in message.content:
+    elif f'@{bot.user.name}' in message.content:
         pass
     elif message.channel.type == discord.ChannelType.private:
         pass
