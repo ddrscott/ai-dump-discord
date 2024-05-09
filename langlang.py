@@ -27,13 +27,14 @@ def fetch_id_token_with_refresh():
     cache['id_token'] = id_token
     return id_token
 
-def generate(messages):
+async def generate(messages):
     # Example usage
     headers = {
         'Authorization': f'Bearer {fetch_id_token_with_refresh()}',
     }
-    with httpx.stream('POST', DATATURD_API_URL, headers=headers, json=messages) as response:
-        for chunk in response.iter_lines():
+    client = httpx.AsyncClient()
+    async with client.stream('POST', DATATURD_API_URL, headers=headers, json=messages) as response:
+        async for chunk in response.aiter_lines():
             if not chunk == '\n':
                 line = json.loads(chunk)
                 yield line

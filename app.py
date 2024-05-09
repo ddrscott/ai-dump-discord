@@ -66,22 +66,33 @@ async def on_message(message):
     async with ctx.typing():
         logging.info(f"Generating full response...")
         full_response = ''
-        for line in langlang.generate(messages):
+        async for line in langlang.generate(messages):
             print(line, end='')
             full_response += line
-        messages += [
-            {"role": "ai", "content": full_response},
-            {"role": "user", "content": f"Summarize the response to less than {MAX_MESSAGE_LENGTH} characters and cite the most relevant reference."}
-        ]
-        logging.info(f"Generating summary response...")
-        succinct = ''
-        for line in langlang.generate(messages):
-            print(line, end='')
-            succinct += line
         print('')
-
-    logging.info(f"Sending response...")
-    await ctx.send(succinct[:MAX_MESSAGE_LENGTH])
+        if '```execute' in full_response:
+            # we need to summarize the execution blocks
+            messages += [
+                {"role": "ai", "content": full_response},
+                {"role": "user", "content": f"Summarize the response to less than {MAX_MESSAGE_LENGTH} characters and cite the most relevant reference."}
+            ]
+            logging.info(f"Generating summary response...")
+            succinct = ''
+            async for line in langlang.generate(messages):
+                print(line, end='')
+                succinct += line
+            print('')
+        else:
+            succinct = full_response
+    # break succinct into multiple messages if it exceeds the limit
+    if len(succinct) > MAX_MESSAGE_LENGTH:
+        logging.info(f"Response exceeds character limit. Splitting response...")
+        while len(succinct) > MAX_MESSAGE_LENGTH:
+            await ctx.send(succinct[:MAX_MESSAGE_LENGTH])
+            succinct = succinct[MAX_MESSAGE_LENGTH:]
+    else:
+        logging.info(f"Sending response...")
+        await ctx.send(succinct[:MAX_MESSAGE_LENGTH])
 
 
 async def startup():
